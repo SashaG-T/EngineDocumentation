@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html > 
+<head><title>Progeny Engine: Generation 1
+Documentation</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)"> 
+<!-- html --> 
+<meta name="src" content="EngineDocumentation.tex"> 
+<link rel="stylesheet" type="text/css" href="EngineDocumentation.css"> 
+</head><body 
+>
+   <div class="maketitle">
+                                                                                       
+
+                                                                                       
+                                                                                       
+
+                                                                                       
+
+<h2 class="titleHead">Progeny Engine: Generation 1<br />
+Documentation</h2>
+<div class="author" ></div><br />
+<div class="date" ><span 
+class="cmr-12x-x-120">March 16, 2019</span></div>
+   </div>
+   <h3 class="sectionHead"><span class="titlemark">1   </span> <a 
+ id="x1-10001"></a>Introduction</h3>
+<!--l. 32--><p class="noindent" >This documentation is meant to serve as a means to better understand the inner workings of
+the Progeny Engine. This documentation may also serve as a means to understand the workings
+of the now legacy &#8220;Core Engine&#8221; from which the code and concepts the Progeny Engine is
+derived. Any application made with the Progeny Engine can be logically broken up into three
+parts: 1) Interface Implementation; 2) Engine Implementation; 3) User Implementation. The
+most common part anyone using the engine would be working with would be the third part,
+User Implementation; but, for the sake of everyone involved, this documentation will cover all
+three. Before we get too into the workings of the engine it could be useful to understand it&#8217;s
+history.
+<!--l. 35--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">1.1   </span> <a 
+ id="x1-20001.1"></a>A Little History Lesson</h4>
+<!--l. 36--><p class="noindent" >Some of the code within the Progeny Engine dates back to late 2014 and possibly even
+2013. Concepts and experience were gathered from an older engine created in late
+2013 and early 2014. At this time there was no other goal than to create an engine
+and learn from it. In around 2015 the code was transfered to another system and
+optimize more, by this point the engine was unofficially called the &#8220;Core Engine&#8221;. The
+Core Engine had enough functionality for a simple game. A demo titlescreen for an
+                                                                                       
+
+                                                                                       
+imaginary game called &#8220;Free Runner&#8221; was created using the engine as a prank and
+sortly after, for no unrelated cause, it was deemed logical that the development of a
+game alongside the engine would help determine flaws in it&#8217;s design; this was the
+begining of the game now called &#8220;Generic Jumper&#8221;. Eventually the game moved to
+source version control and for the lack of a more interesting name &#8220;Core Engine&#8221;
+ended up sticking. After the release it was obvious that the engine had many flaws in
+design. Some issues with the engine were solved during the development of Generic
+Jumper with the use of temporary, unsatisfying, patches. Geneirc Jumper released on
+August 31, 2018 and the Core Engine shelved and it&#8217;s derivative born: Progeny Engine
+Generation 1. Named in such as a means to describe it&#8217;s evolution from the Core
+Engine and that the new engine is meant to tackle issues found in the older engine&#8217;s
+design.
+<!--l. 38--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2   </span> <a 
+ id="x1-30002"></a>The Rough Details</h3>
+<!--l. 39--><p class="noindent" >This section of the documentation is to give the reader an idea of what different parts of the
+engine do in a vague over simplistic way. It is meant to help someone gain a slight
+understanding before they dive neck deep into the more complicated text. It also provides a
+means for someone wanting to know if this is the right engine for them to use. If there were any
+section in this documentation that would be recommeneded above all others it would probably
+be this one as this section will help the reader create a basic understanding of the engine&#8217;s
+structure.
+<!--l. 41--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.1   </span> <a 
+ id="x1-40002.1"></a>Interface Implementation</h4>
+<!--l. 42--><p class="noindent" >Some naive developers might strafe right into developing an engine for a game with
+the main engine code calling methods to an external graphics library. Of course,
+there are reasons to why you would like to do that for a project yourself but if you
+have no idea what systems your engine will be running on it is a good idea to have
+some way to seperate engine logic from system dependent logic (such as media layer
+calls).
+<!--l. 44--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.2   </span> <a 
+ id="x1-50002.2"></a>Engine Implementation</h4>
+<!--l. 45--><p class="noindent" >The Engine Implementation in a perfect world would not have to be touched by many
+individuals. Most of what will be covered in this documentation will not be on how to write the
+                                                                                       
+
+                                                                                       
+Engine Implementation (as it is already written and if changed makes the rest of
+this documentation absolete) but how the Engine Implementation interacts with the
+Interface Implementation and the User Implementation. In a nutshell (perhaps a very
+too obvious nutshell) the Egine Implementation is the core implementation of the
+engine that defines the behaviours of the classes it presents to be used by the User
+Implementation.
+<!--l. 47--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.3   </span> <a 
+ id="x1-60002.3"></a>User Implementation</h4>
+<!--l. 48--><p class="noindent" >This is what makes a game different from all the other games. It is the logic behind the game.
+Not much else to say here.
+<!--l. 50--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.4   </span> <a 
+ id="x1-70002.4"></a>Game States</h4>
+<!--l. 51--><p class="noindent" >Every game will have at least one class, a &#8216;game state&#8217;, that inherites the GameState class. This
+class implements virtual functions that are defined by the GameState class and are called at
+various points during the program&#8217;s lifetime. Game states are the logical seperations in the
+game&#8217;s logic and so it will be natural to have multiple game states per game. Think of a game
+you have played. It will have distinctive seperations in gameplay, perhaps it had a:
+titlescreen; save file select screen; cutscenes; and, most probably, some sort of main
+interactive state. Game states are not limited to these examples but can consist of
+loading screens and other non interactive parts of the game; it&#8217;s really up to you!
+<br 
+class="newline" />
+<!--l. 59--><p class="indent" >   Another important thing to note about game states is that they inherit the StateManipulator
+class through the GameState class. This give the game states control over the flow between
+game states. The GameState class gives the user virtual functions to implement the behaviour
+of various points during a game states lifetime where the StateManipulator class gives the user
+a way to cause change to the game states lifetime; this will be discussed in more detail in a later
+section.
+   <h4 class="subsectionHead"><span class="titlemark">2.5   </span> <a 
+ id="x1-80002.5"></a>Game Objects</h4>
+<!--l. 63--><p class="noindent" >Game Objects are the building blocks of everything the player interacts with. If game states
+were the stage of your game then your game objects would be the props, the backdrops, the
+curtains, the actors, etc. It is possible to build a game using the engine without the use of the
+GameObject class but it would be like re-inventing the wheel when someone already invented
+the car! To better exaplain without the use of a super vague analogy: A game object is made up
+                                                                                       
+
+                                                                                       
+of different smaller parts where each component has some sort of effect on how the player
+interacts with it. These smaller parts are called components and they inherite the
+ObjectComponent class.
+<!--l. 65--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.5.1   </span> <a 
+ id="x1-90002.5.1"></a>Object Components</h5>
+<!--l. 66--><p class="noindent" >There is currently 5 ObjectComponent classes: TransformComponent; SpriteComponent;
+RigidBodyComponent; ColliderComponent; and the Controller ObjectComponent class.
+The last one is named differently simply because it has a special use and is handled
+a bit differently then the rest. If one would want they would be able to add more
+ObjectComponent classes but this would require the use of modifying the Enigne
+Implementation so that the Engine would know what to do with the newly added component.
+<br 
+class="newline" />
+<!--l. 69--><p class="indent" >   To go over in brief, the TransformComponent represents an object&#8217;s position, rotation, and
+an identifyer; the SpriteComponent represents the image (sprite) to use along with
+some associated data; the RigidBodyComponent represents the physical properities
+the object has such as mass and restitution; the ColliderComponent is the shape of
+the object itself; and the Controller ObjectComponent is what defines the object&#8217;s
+behaviour (such as how it moves around the screen or what happens when it collides with
+some).
+<!--l. 71--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.6   </span> <a 
+ id="x1-100002.6"></a>Listener Classes</h4>
+<!--l. 72--><p class="noindent" >EventListener, TriggerListener
+   <h4 class="subsectionHead"><span class="titlemark">2.7   </span> <a 
+ id="x1-110002.7"></a>Controller Classes</h4>
+<!--l. 74--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.8   </span> <a 
+ id="x1-120002.8"></a>...</h4>
+<!--l. 75--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">3   </span> <a 
+ id="x1-130003"></a>A Guide to the Basics</h3>
+                                                                                       
+
+                                                                                       
+<!--l. 76--><p class="noindent" >This section is meant to be a guide to starting and maintaining a project. It goes over good
+practices to follow and tips to efficiently use the engine.
+   <h4 class="subsectionHead"><span class="titlemark">3.1   </span> <a 
+ id="x1-140003.1"></a>Where to Start</h4>
+<!--l. 78--><p class="noindent" >This subsection goes over the setup of a basic project. In most cases the code provided in
+this subsection will be suffice for most games you would want to create using this
+engine.
+   <h5 class="subsubsectionHead"><span class="titlemark">3.1.1   </span> <a 
+ id="x1-150003.1.1"></a>Installation</h5>
+<!--l. 80--><p class="noindent" >If you are using the interface implementations provided by the engine then you will be required
+to install a few extra libraries; if not then you will have to build the implementations yourself
+(this is not recommend for anyone not familiar with the engine). How to implement the
+interfaces will not be discussed here; information on doing so can be found in &#8220;A Guide to the
+Not-So-Basics&#8221; section.
+   <h5 class="subsubsectionHead"><span class="titlemark">3.1.2   </span> <a 
+ id="x1-160003.1.2"></a>Sanity Check</h5>
+<!--l. 82--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.1.3   </span> <a 
+ id="x1-170003.1.3"></a>main.cpp</h5>
+<!--l. 83--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.1.4   </span> <a 
+ id="x1-180003.1.4"></a>The First Game State</h5>
+<!--l. 84--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.2   </span> <a 
+ id="x1-190003.2"></a>Where to Continue</h4>
+<!--l. 85--><p class="noindent" >This subsection builds off of the previous subsections code although you really only
+will need a basic project setup. We will first start off with designing and managing
+GameObjects.
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.1   </span> <a 
+ id="x1-200003.2.1"></a>Designing GameObjects</h5>
+                                                                                       
+
+                                                                                       
+<!--l. 87--><p class="noindent" >GameObjects are designed to take advantage of C++&#8217;s polymorphism features. This is to allow
+the reuse of code for different GameObjects. An example of this could be to have all
+GameObjects that have an animated sprite inherit their main implementation from another
+GameObject that implements the animated feature. It is also important to know just how
+GameObjects are processed by the engine to make full use of them. First we will create a new
+header file named &#8220;mob.h&#8221;. In this header we will include &#8220;src/engine/GameObject.h&#8221; and
+define class named &#8220;Mob&#8221; that will inherit the class &#8220;GameObject&#8221; publicly. The source should
+look like this:
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.2   </span> <a 
+ id="x1-210003.2.2"></a>Behaviour with Controllers</h5>
+<!--l. 90--><p class="noindent" >Instead of adding changes in a GameObject&#8217;s data through GameState functions you can do so
+through Controllers.
+<!--l. 92--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.3   </span> <a 
+ id="x1-220003.2.3"></a>Organizing GameStates</h5>
+<!--l. 93--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.4   </span> <a 
+ id="x1-230003.2.4"></a>Events and User Input</h5>
+<!--l. 94--><p class="noindent" >go over enums and static classes that call EventInterface::pushEvent(..) so that implementation
+of the data pointers can be transparent to users. This is important for larger projects with
+multiple maintainers as forces the implementation to be in one class. For example if one of the
+pointers is dynamically allocated then having a user do eventInterface.pushEvent(..., new
+DataObject(), ...) feels unsafe because they&#8217;re passing ownership to something that might feel
+unknown. So defining functions that push events in the same class(namespace) means that the
+new and delete will be in the same namespace aswell... and the users can simply call
+Mob::pushJumpEvent(); to push a jump event. (This can be seen in Walkway for the dialogue
+system since it&#8217;s passing pointers to std::string&#8217;s.)
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.5   </span> <a 
+ id="x1-240003.2.5"></a>User Event Practices</h5>
+<!--l. 96--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.6   </span> <a 
+ id="x1-250003.2.6"></a>Triggers and Collision Detection</h5>
+                                                                                       
+
+                                                                                       
+<!--l. 97--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.7   </span> <a 
+ id="x1-260003.2.7"></a>Persistence with Strings</h5>
+<!--l. 98--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.8   </span> <a 
+ id="x1-270003.2.8"></a>Audio and FX</h5>
+<!--l. 100--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4   </span> <a 
+ id="x1-280004"></a>A Guide to the Not-So-Basics</h3>
+<!--l. 101--><p class="noindent" >This section is meant to be a guide to the modifiable elements of the engine that are outside the
+User Implementation side of things. For example, adding a new GameObjectComponent or
+anything else requiring you to modify/add/remove engine code. View the subsections below to
+see if what you would like to do is covered, otherwise email us at query@asphe.games to inquire
+more!
+   <h4 class="subsectionHead"><span class="titlemark">4.1   </span> <a 
+ id="x1-290004.1"></a>Implementing Interfaces</h4>
+<!--l. 103--><p class="noindent" >This subsection is meant to go over the basic contracts defined by each Interface class. Details
+on what each paramater means and what they are expected to do are discussed below for the
+sake of both users that want to understand what the interfaces are doing and for implementors
+that want to implement these contracts.
+   <h5 class="subsubsectionHead"><span class="titlemark">4.1.1   </span> <a 
+ id="x1-300004.1.1"></a>File Interface</h5>
+<!--l. 105--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">4.1.2   </span> <a 
+ id="x1-310004.1.2"></a>Event Interface</h5>
+<!--l. 106--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">4.1.3   </span> <a 
+ id="x1-320004.1.3"></a>Graphics Interface</h5>
+<!--l. 108--><p class="noindent" >_______________________________________________________________________________________
+<br 
+class="newline" /><span 
+class="cmbx-12">void</span><br 
+class="newline" /><span 
+class="cmbx-12">GraphicsInterface::</span><span 
+class="cmbx-12x-x-144">renderClear</span><span 
+class="cmbx-12">( </span><br 
+class="newline" /><br 
+class="newline" />          <span 
+class="cmbx-12">void</span><br 
+class="newline" /><span 
+class="cmbx-12">); </span><br 
+class="newline" />_______________________________________________________________________________________
+<br 
+class="newline" />
+      <ol  class="enumerate1" >
+      <li 
+  class="enumerate" id="x1-32002x1">Clear the current rendering target.</li></ol>
+<!--l. 115--><p class="noindent" >_______________________________________________________________________________________
+<br 
+class="newline" /><span 
+class="cmbx-12">void</span><br 
+class="newline" /><span 
+class="cmbx-12">GraphicsInterface::</span><span 
+class="cmbx-12x-x-144">basicRenderCopy</span><span 
+class="cmbx-12">( </span><br 
+class="newline" /><br 
+class="newline" />          <span 
+class="cmbx-12">int32</span><span 
+class="cmbx-12">_t textureID,</span><br 
+class="newline" />          <span 
+class="cmbx-12">int32</span><span 
+class="cmbx-12">_t destX,</span><br 
+class="newline" />          <span 
+class="cmbx-12">int32</span><span 
+class="cmbx-12">_t destY</span><br 
+class="newline" /><span 
+class="cmbx-12">); </span><br 
+class="newline" />_______________________________________________________________________________________
+<br 
+class="newline" />
+      <ol  class="enumerate1" >
+      <li 
+  class="enumerate" id="x1-32004x1">Render texture with textureID on current rendering target at destination <span 
+class="cmsy-10x-x-120">{</span>destX,
+      destY<span 
+class="cmsy-10x-x-120">} </span>with a pixel ratio of 1:1.</li></ol>
+<!--l. 124--><p class="noindent" >_______________________________________________________________________________________
+<br 
+class="newline" /><span 
+class="cmbx-12">void</span><br 
+class="newline" /><span 
+class="cmbx-12">GraphicsInterface::</span><span 
+class="cmbx-12x-x-144">setWindowSize</span><span 
+class="cmbx-12">( </span><br 
+class="newline" /><br 
+class="newline" />          <span 
+class="cmbx-12">uint32</span><span 
+class="cmbx-12">_t width,</span><br 
+class="newline" />          <span 
+class="cmbx-12">uint32</span><span 
+class="cmbx-12">_t height</span><br 
+class="newline" /><span 
+class="cmbx-12">); </span><br 
+class="newline" />_______________________________________________________________________________________
+<br 
+class="newline" />
+      <ol  class="enumerate1" >
+      <li 
+  class="enumerate" id="x1-32006x1">When called before <span 
+class="cmti-12">GraphicsInterface::createWindow() </span>this function is to set the
+      window size in pixels. Mapping viewport pixels to display pixels with a 1:1 ratio.<br 
+class="newline" />
+                                                                                       
+
+                                                                                       
+      </li>
+      <li 
+  class="enumerate" id="x1-32008x2">When  called  after  <span 
+class="cmti-12">GraphicsInterface::createWindow()  </span>this  function  is  to  set  the
+      window size in pixels without changing the viewports resolution. <br 
+class="newline" /></li></ol>
+<!--l. 133--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">4.1.4   </span> <a 
+ id="x1-330004.1.4"></a>Audio Interface</h5>
+<!--l. 134--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.2   </span> <a 
+ id="x1-340004.2"></a>Adding GameObjectComponents</h4>
+<!--l. 135--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.3   </span> <a 
+ id="x1-350004.3"></a>...</h4>
+<!--l. 137--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">5   </span> <a 
+ id="x1-360005"></a>Persistence</h3>
+<!--l. 138--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">5.1   </span> <a 
+ id="x1-370005.1"></a>Macros</h4>
+<!--l. 139--><p class="noindent" >STRMAP<br 
+class="newline" />STRSET<br 
+class="newline" />STRGET<br 
+class="newline" />STRKILL<br 
+class="newline" />VARSET<br 
+class="newline" />VARGET<br 
+class="newline" />VARKILL<br 
+class="newline" />
+<!--l. 147--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">6   </span> <a 
+ id="x1-380006"></a>Inherited Classes</h3>
+                                                                                       
+
+                                                                                       
+<!--l. 148--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.1   </span> <a 
+ id="x1-390006.1"></a>Controller.h</h4>
+<!--l. 149--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.2   </span> <a 
+ id="x1-400006.2"></a>EventListener.h</h4>
+<!--l. 150--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.3   </span> <a 
+ id="x1-410006.3"></a>GameObject.h</h4>
+<!--l. 151--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.4   </span> <a 
+ id="x1-420006.4"></a>GameState.h</h4>
+<!--l. 152--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.5   </span> <a 
+ id="x1-430006.5"></a>Packageable.h</h4>
+<!--l. 153--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.6   </span> <a 
+ id="x1-440006.6"></a>StateManipulator.h</h4>
+<!--l. 154--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.7   </span> <a 
+ id="x1-450006.7"></a>TriggerListener.h</h4>
+<!--l. 155--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">7   </span> <a 
+ id="x1-460007"></a>Packages</h3>
+<!--l. 156--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">7.1   </span> <a 
+ id="x1-470007.1"></a>GuiPackage::Label()</h4>
+                                                                                       
+
+                                                                                       
+<!--l. 157--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">8   </span> <a 
+ id="x1-480008"></a>Generic</h3>
+<!--l. 158--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">8.1   </span> <a 
+ id="x1-490008.1"></a>Point.h</h4>
+<!--l. 159--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">8.2   </span> <a 
+ id="x1-500008.2"></a>Rectangle.h</h4>
+<!--l. 160--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">8.3   </span> <a 
+ id="x1-510008.3"></a>Vector.h</h4>
+    
+</body></html> 
+
+                                                                                       
+
+
