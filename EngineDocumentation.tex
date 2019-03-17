@@ -6,18 +6,21 @@
 \textheight 21cm
 \footskip 1.0cm
 
+% \param does not translate well through htlatex (indent doesn't appear)
 \newcommand{\param}[1]{\indent\phantom{indent} \textbf{#1}\\ }
-\newenvironment{func}[3]% return type, namespace, function name
+\newenvironment{func}[4]% return type, namespace, function name, params
 {% begin code
 	\noindent\ignorespaces
+	\begin{minipage}[b]{\linewidth}
 	\rule{\textwidth} {1pt} \\
-	\textbf{#1\\#2::{\Large \color{blue}{#3}}(} \\ \\
+	\textbf{#1\\#2::{\Large \color{blue}{#3}}(} \\
+	\textbf{#4);} \\
 	\noindent\ignorespaces
 }%
 {% end code
-	\textbf{);} \\
 	\ignorespacesafterend
 	\rule{\textwidth} {0.01pt} \\
+	\end{minipage}
 }
 
 \begin{document}
@@ -33,7 +36,7 @@ This documentation is meant to serve as a means to better understand the inner w
 This documentation may also serve as a means to understand the workings of the now legacy ``Core Engine'' from which the code and concepts the Progeny Engine is derived. Any application made with the Progeny Engine can be logically broken up into three parts: 1) Interface Implementation; 2) Engine Implementation; 3) User Implementation. The most common part anyone using the engine would be working with would be the third part, User Implementation; but, for the sake of everyone involved, this documentation will cover all three. Before we get too into the workings of the engine it could be useful to understand it's history.
 
 \subsection{A Little History Lesson}
-Some of the code within the Progeny Engine dates back to late 2014 and possibly even 2013. Concepts and experience were gathered from an older engine created in late 2013 and early 2014. At this time there was no other goal than to create an engine and learn from it. In around 2015 the code was transfered to another system and optimize more, by this point the engine was unofficially called the ``Core Engine''. The Core Engine had enough functionality for a simple game. A demo titlescreen for an imaginary game called ``Free Runner'' was created using the engine as a prank and sortly after, for no unrelated cause, it was deemed logical that the development of a game alongside the engine would help determine flaws in it's design; this was the begining of the game now called ``Generic Jumper''. Eventually the game moved to source version control and for the lack of a more interesting name ``Core Engine'' ended up sticking. After the release it was obvious that the engine had many flaws in design. Some issues with the engine were solved during the development of Generic Jumper with the use of temporary, unsatisfying, patches. Geneirc Jumper released on August 31, 2018 and the Core Engine shelved and it's derivative born: Progeny Engine Generation 1. Named in such as a means to describe it's evolution from the Core Engine and that the new engine is meant to tackle issues found in the older engine's design.
+Some of the code within the Progeny Engine dates back to late 2014 and possibly even 2013. Concepts and experience were gathered from an older engine created in late 2013 and early 2014. At this time there was no other goal than to create an engine and learn from it. In around 2015 the code was transfered to another system and optimize more, by this point the engine was unofficially called the ``Core Engine''. The Core Engine had enough functionality for a simple game. A demo titlescreen for an imaginary game called ``Free Runner'' was created using the engine as a prank and sortly after, for no unrelated cause, it was deemed logical that the development of a game alongside the engine would help determine flaws in it's design; this was the begining of the game now called ``Generic Jumper''. Eventually the game moved to source version control and for the lack of a more interesting name ``Core Engine'' ended up sticking. After the release it was obvious that the engine had many flaws in design. Some issues with the engine were solved during the development of Generic Jumper with the use of temporary, unsatisfying, patches. Generic Jumper released on August 31, 2018 and the Core Engine was shelved and it's derivative born: Progeny Engine Generation 1. Named in such as a means to describe it's evolution from the Core Engine and that the new engine is meant to tackle issues found in the older engine's design.
 
 \section{The Rough Details}
 This section of the documentation is to give the reader an idea of what different parts of the engine do in a vague over simplistic way. It is meant to help someone gain a slight understanding before they dive neck deep into the more complicated text. It also provides a means for someone wanting to know if this is the right engine for them to use. If there were any section in this documentation that would be recommeneded above all others it would probably be this one as this section will help the reader create a basic understanding of the engine's structure.
@@ -99,36 +102,67 @@ go over enums and static classes that call EventInterface::pushEvent(..) so that
 
 \section{A Guide to the Not-So-Basics}
 This section is meant to be a guide to the modifiable elements of the engine that are outside the User Implementation side of things. For example, adding a new GameObjectComponent or anything else requiring you to modify/add/remove engine code. View the subsections below to see if what you would like to do is covered, otherwise email us at query@asphe.games to inquire more!
-\subsection{Implementing Interfaces}
-This subsection is meant to go over the basic contracts defined by each Interface class. Details on what each paramater means and what they are expected to do are discussed below for the sake of both users that want to understand what the interfaces are doing and for implementors that want to implement these contracts.
+\subsection{Interfaces}
+This subsection is meant to go over the basic contracts defined by each Interface class. Details on what each paramater means and what they are expected to do are discussed below for the sake of both users and implementors that want to know how an interface call is supposed to behave.
 \subsubsection{File Interface}
 \subsubsection{Event Interface}
 \subsubsection{Graphics Interface}
 
 \begin{func}{void}{GraphicsInterface}{renderClear}
-\param{void}
-\end{func}
+{
+	%\param{void}
+}
 \begin{enumerate}
-\item Clear the current rendering target.
+\item[]\textit{\textbf{Clear the current rendering target.}}
+\item Sets each pixel of the rendering target to the colour set by \textit{GraphicsInterface::setDrawColour(uint32\_t colour)}.
 \end{enumerate}
+\end{func}
 
 \begin{func}{void}{GraphicsInterface}{basicRenderCopy}
-\param{int32\_t textureID,}
-\param{int32\_t destX,}
-\param{int32\_t destY}
-\end{func}
+{
+	\param{int32\_t textureID,}
+	\param{int32\_t destX,}
+	\param{int32\_t destY}
+}
 \begin{enumerate}
-\item Render texture with textureID on current rendering target at destination \{destX, destY\} with a pixel ratio of 1:1.
+\item[]\textit{\textbf{Render the entirety of a texture on to the current rendering target.}}
+\item \textit{textureID} is the ID of the texture that is to be rendered.
+\item \textit{destX} is the X-Coordinate where the upper left corner of the texture will apear on the rendering target.
+\item \textit{destY} is the Y-Coordinate where the upper left corner of the texture will apear on the rendering target.
+\item The texture will be rendered to the rendering target to a 1:1 pixel ratio.
+\item If the function is passed an invalid texture ID the rendering target will be unaffected.
+\item \textit{destX} and \textit{destY} may be any value; any area of the texture that overlaps with the rendering target will still be rendered.
 \end{enumerate}
+\end{func}
+
+\begin{func}{void}{GraphicsInterface}{renderCopy}
+{
+	\param{int32\_t textureID,}
+	\param{Rectangle const * const sourceRect,}
+	\param{Rectangle const * const destinationRect}
+}
+\begin{enumerate}
+\item[]\textit{\textbf{Render a specified area of a texture on to a specified area of the rendering target.}}
+\item \textit{textureID} is the ID of the texture that is to be rendered.
+\item \textit{sourceRectangle} is the `specified area' of the texture to be rendered to the rendering target.
+\item \textit{destinationRectangle} is the `specified area' of the rendering target that will be rendered too.
+\item The `specified area' represented by \textit{sourceRectangle} will be scaled to match the size of the `specified area' represented by \textit{destinationSource}.
+\item If \textit{sourceRectangle} is null then use the entire texture. {\color{red}{(?-)}}
+\item If \textit{destinationRectangle} is null then use the entire area of the rendering target as the destination. {\color{red}{(?)}}
+\end{enumerate}
+\end{func}
 
 \begin{func}{void}{GraphicsInterface}{setWindowSize}
-\param{uint32\_t width,}
-\param{uint32\_t height}
-\end{func}
+{
+	\param{uint32\_t width,}
+	\param{uint32\_t height}
+}
 \begin{enumerate}
-\item When called before \textit{GraphicsInterface::createWindow()} this function is to set the window size in pixels. Mapping viewport pixels to display pixels with a 1:1 ratio.\\
-\item When called after \textit{GraphicsInterface::createWindow()} this function is to set the window size in pixels without changing the viewports resolution. \\
+\item[]\textit{\textbf{Changes the window's width and height.}}
+\item When called before \textit{GraphicsInterface::createWindow()} this function is to set the window size in pixels by mapping viewport pixels to display pixels with a 1:1 ratio.
+\item When called after \textit{GraphicsInterface::createWindow()} this function is to set the window size in pixels without changing the viewports resolution.
 \end{enumerate}
+\end{func}
 
 \subsubsection{Audio Interface}
 \subsection{Adding GameObjectComponents}

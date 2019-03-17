@@ -6,7 +6,7 @@ If you find that this document is missing something or needs clarification
 please open up an issue and we'll try our best to get to it as soon as we can.
 
 To view the most current documentation you can find it here:
->https://sashag-t.github.io/EngineDocumentation/EngineDocumentation.html
+><https://sashag-t.github.io/EngineDocumentation/EngineDocumentation.html>
   
 If you would prefere to download a PDF you can download it here:
->https://sashag-t.github.io/EngineDocumentation/EngineDocumentation.pdf
+><https://sashag-t.github.io/EngineDocumentation/EngineDocumentation.pdf>
